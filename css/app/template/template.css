@@ -25,11 +25,19 @@
 
 .kh_case {
   padding: 20px;
-  background: radial-gradient(circle, rgb(49, 50, 51) 0%, rgb(48, 50, 56) 100%);
   border-radius: 5px;
+  background: radial-gradient(circle, rgb(21, 21, 21) 0%, rgb(48, 50, 56) 100%);
+
+
+  /* background: rgb(63, 61, 61);
+  background: linear-gradient(90deg, rgb(130, 132, 133) 27%, rgba(233,249,255,0.7679446778711485) 55%, rgba(238,253,255,0.6) 84%); */
+
+
+
+
 }
 
-.kh_display {
+  .kh_display {
   /* background: #21272b; */
   border: 2px solid #191f23;
   background: radial-gradient(#dddddd 1px, #b6b6b6 5px);
