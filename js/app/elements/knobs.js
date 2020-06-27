@@ -43,18 +43,22 @@ class KnobAnalog extends Display {
             type: "rotation",
             throwProps: true,
             edgeResistance: 1,
-            bounds: { minRotation: 0, maxRotation: 360 },
+            bounds: { minRotation: 0, maxRotation: 270 },
             onDragStart: function () {
                 slf.killTweens();
             },
             onDrag: function () {
                 var index = $(this.target).attr('accesskey');
-                slf.knob_values_raw[index] = $(this)[0].endRotation
+                var angle = $(this)[0].endRotation
+                slf.knob_values_raw[index] = angle;
+                slf.tickManager(angle, this);
                 slf.onRotateKnob(index);
             },
             onThrowUpdate: function () {
                 var index = $(this.target).attr('accesskey');
-                slf.knob_values_raw[index] = $(this)[0].endRotation
+                var angle = $(this)[0].endRotation
+                slf.knob_values_raw[index] = angle;
+                slf.tickManager(angle, this);
                 slf.onRotateKnob(index);
             },
             snap: function (endValue) {
@@ -62,6 +66,77 @@ class KnobAnalog extends Display {
         });
         super.SET_KnobValues(this.knob_values_raw);
         this.updateRotation(0);
+        //this.tickManager();
+    }
+
+    tickManager(angle, container) {
+        if (angle == null && container == null) {
+            var ticks = $('#knobBG .ticks')
+            var tick = $(ticks).find('.tick')
+            var ang = this.knob_template_values;
+
+            var ii = 0;
+            $.each($(tick), function (i, el) {
+                // console.log(el)
+
+                if(ii % 11 == 0){
+                    ii=0;
+                }{
+                    ii+=1;
+                    $(this).attr('class', 'tick on');
+                }
+
+                // $(el).
+
+
+                // if (i < leds_on) {
+                //     console.log(i)
+                //     $(this).attr('class', 'tick on');
+                // } else {
+                //     $(this).attr('class', 'tick off');
+                // }
+
+            })
+        } else {
+            // console.log(angle)
+            var leds_on = 1;
+            if (angle < 27) {
+                leds_on = 1;
+            } else if (angle >= 27 && angle < 54) {
+                leds_on = 2;
+            } else if (angle >= 54 && angle < 81) {
+                leds_on = 3;
+            } else if (angle >= 81 && angle < 108) {
+                leds_on = 4;
+            } else if (angle >= 108 && angle < 135) {
+                leds_on = 5;
+            } else if (angle >= 135 && angle < 162) {
+                leds_on = 6;
+            } else if (angle >= 162 && angle < 189) {
+                leds_on = 7;
+            } else if (angle >= 189 && angle < 216) {
+                leds_on = 8;
+            } else if (angle >= 216 && angle < 243) {
+                leds_on = 9;
+            } else if (angle >= 243 && angle < 270) {
+                leds_on = 10;
+            } else if (angle >= 270 && angle < 297) {
+                leds_on = 11;
+            }
+
+            var knob_container = container.target.parentElement;
+            var ticks = $(knob_container).find('.tick')
+            $.each($(ticks), function (i) {
+                if (i < leds_on) {
+                    // console.log(i)
+                    $(this).attr('class', 'tick on');
+                } else {
+                    $(this).attr('class', 'tick off');
+                }
+
+            })
+        }
+
     }
 
     updateRotation(index) {
