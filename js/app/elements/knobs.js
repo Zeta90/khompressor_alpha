@@ -10,6 +10,7 @@ class KnobAnalog extends Display {
         //  Init Knobs Array
         this.knob_values_raw = [0, 0, 0, 0, 0, 0];
         this.knob_template_values = [];
+        this.knob_template_limits = [];
 
         //  Init Knob functionality
         this.initKnob();
@@ -34,6 +35,8 @@ class KnobAnalog extends Display {
 
     SetKnobParams() {
         this.knob_template_values.push([5, 15, 0, 0, 0, 0]);
+
+        this.knob_template_values.push([0,5]);
     }
 
     initializingKnobs() {
@@ -65,64 +68,47 @@ class KnobAnalog extends Display {
             }
         });
         super.SET_KnobValues(this.knob_values_raw);
+        this.tickManager();
         this.updateRotation(0);
-        //this.tickManager();
+    }
+
+    getTemplateInitialDegValues(index) {
+        //this.knob_template_values; //[5 15 0 0 0 0]
+        return this.knob_template_values[0][index];
     }
 
     tickManager(angle, container) {
+        var leds_on = 1;
         if (angle == null && container == null) {
             var ticks = $('#knobBG .ticks')
-            var tick = $(ticks).find('.tick')
-            var ang = this.knob_template_values;
+            var slf = this;
+            $.each(ticks, function (i, eli) {
+                var tick = $(eli).find('.tick')
+                var current_initial_value = slf.getTemplateInitialDegValues(i);
 
-            var ii = 0;
-            $.each($(tick), function (i, el) {
-                // console.log(el)
+                var current_angle = 0;
 
-                if(ii % 11 == 0){
-                    ii=0;
-                }{
-                    ii+=1;
-                    $(this).attr('class', 'tick on');
+                if (i == 0) {
+                    current_angle = current_initial_value * 270 / 5;
+                } else {
+                    current_angle = current_initial_value * 270 / 20;
                 }
 
-                // $(el).
+                leds_on = slf.knobLedManager(current_angle);
+                console.log(current_angle)
 
-
-                // if (i < leds_on) {
-                //     console.log(i)
-                //     $(this).attr('class', 'tick on');
-                // } else {
-                //     $(this).attr('class', 'tick off');
-                // }
-
+                $.each(tick, function (j, elj) {
+                    if (j < leds_on) {
+                        console.log(i)
+                        $(this).attr('class', 'tick on');
+                    } else {
+                        $(this).attr('class', 'tick off');
+                    }
+                })
             })
         } else {
-            // console.log(angle)
-            var leds_on = 1;
-            if (angle < 27) {
-                leds_on = 1;
-            } else if (angle >= 27 && angle < 54) {
-                leds_on = 2;
-            } else if (angle >= 54 && angle < 81) {
-                leds_on = 3;
-            } else if (angle >= 81 && angle < 108) {
-                leds_on = 4;
-            } else if (angle >= 108 && angle < 135) {
-                leds_on = 5;
-            } else if (angle >= 135 && angle < 162) {
-                leds_on = 6;
-            } else if (angle >= 162 && angle < 189) {
-                leds_on = 7;
-            } else if (angle >= 189 && angle < 216) {
-                leds_on = 8;
-            } else if (angle >= 216 && angle < 243) {
-                leds_on = 9;
-            } else if (angle >= 243 && angle < 270) {
-                leds_on = 10;
-            } else if (angle >= 270 && angle < 297) {
-                leds_on = 11;
-            }
+            console.log(angle)
+            leds_on = this.knobLedManager(angle);
 
             var knob_container = container.target.parentElement;
             var ticks = $(knob_container).find('.tick')
@@ -133,10 +119,36 @@ class KnobAnalog extends Display {
                 } else {
                     $(this).attr('class', 'tick off');
                 }
-
             })
         }
+    }
 
+    knobLedManager(angle) {
+        var leds_on = 1;
+        if (angle < 27) {
+            leds_on = 1;
+        } else if (angle >= 27 && angle < 54) {
+            leds_on = 2;
+        } else if (angle >= 54 && angle < 81) {
+            leds_on = 3;
+        } else if (angle >= 81 && angle < 108) {
+            leds_on = 4;
+        } else if (angle >= 108 && angle < 135) {
+            leds_on = 5;
+        } else if (angle >= 135 && angle < 162) {
+            leds_on = 6;
+        } else if (angle >= 162 && angle < 189) {
+            leds_on = 7;
+        } else if (angle >= 189 && angle < 216) {
+            leds_on = 8;
+        } else if (angle >= 216 && angle < 243) {
+            leds_on = 9;
+        } else if (angle >= 243 && angle < 270) {
+            leds_on = 10;
+        } else if (angle >= 270 && angle < 297) {
+            leds_on = 11;
+        }
+        return leds_on;
     }
 
     updateRotation(index) {
@@ -144,7 +156,7 @@ class KnobAnalog extends Display {
             console.log(this.knob_template_values[index])
             TweenMax.set(this.knob[i], {
                 rotation:
-                    this.knob_template_values[index][i] * 30
+                    this.knob_template_values[index][i] * 54
             });
         }
     }
