@@ -108,7 +108,7 @@ class KnobAnalog extends Display {
 
     //  SUPER - DISPLAY
     setSuperData(index) {
-        super.setKnobValues(this.knob_angles, this.knob_seconds)
+        super.setFromChildKnobValues(this.knob_angles, this.knob_seconds)
     }
 
     //  LEDS
