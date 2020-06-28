@@ -66,24 +66,63 @@
   );
   background-size: 100% 0.2rem;
   border-radius: 10px;
-
+  background-color: #08581271;
   /* background: radial-gradient(#191f23 1px, transparent 5px);
   background-size: 3px 3px; */
 }
-.kh_display.dotted .kh_display_glow {
-  background-color: #1bd4597a;
-  position: relative;
+.kh_display_glow {
+  position: absolute;
+  /* background-color: #1bd459ab; */
+  width: 0%;
+  height: 0%;
+  border-radius: 10px;
+  /* margin-top: -295px; */
+
+  /* opacity: 0.15; */
+  /* pointer-events: none; */
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(255, 255, 255, 0)),
+    color-stop(50%, rgba(255, 255, 255, 0)),
+    color-stop(70%, rgba(0, 0, 0, 0.2)),
+    to(rgba(0, 0, 0, 0.6))
+  );
+
+  background-size: 100% 0.2rem;
+  border-radius: 10px;
+}
+
+.kh_display_digital_pad {
   width: 100%;
   height: 100%;
-  top: -295px;
   border-radius: 10px;
+  padding: 10px;
+}
 
-  /* -webkit-animation: crt-glow 60s infinite;
-          animation: crt-glow 60s infinite;
-  background: radial-gradient(circle at center, #1bd4597a 0%, rgba(27, 212, 89, 0.48) 58%, rgba(21, 235, 92, 0.57) 80%, rgba(19, 94, 29, 0.27) 93%, rgba(24, 167, 46, 0.1) 100%); */
-  opacity: 0.15;
-  pointer-events: none;
-  /* position: fixed; */
+.digital_btn {
+  position: relative;
+  width: 150px;
+  height: 50px;
+  /* background-color: tomato; */
+  margin-top: 10px;
+  font-family: "Orbitron", sans-serif;
+  margin: auto;
+  /* border-color: #568a6a; */
+  border-width: 0px;
+  border-style: none;
+  color: red;
+  background-color: transparent;
+  border-color: rgb(56, 68, 49);
+  border-style: solid;
+  border-width: 2px;
+  margin-bottom: 10px;
+
+}
+.digital_btn .db {
+  width: auto;
+  margin: auto;
 }
 
 .kh_wave_controls {

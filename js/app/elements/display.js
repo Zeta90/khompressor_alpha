@@ -26,7 +26,12 @@ class Display {
         var screen_width = $('.kh_display');
         var fit_screen = $('.kh_display_board');
         this.screen_width = screen_width.width();
-        $(fit_screen).width(screen_width.width())
+        $(fit_screen).width(screen_width.width());
+
+        var glow = $('.kh_display_glow');
+        $(glow).css('width', screen_width.width() + 2 + 'px')
+        .css('height', screen_width.height() + 2 + 'px');
+
         this.refreshDisplay();
 
     }
