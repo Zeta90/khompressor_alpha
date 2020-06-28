@@ -18,20 +18,20 @@ class Display {
         this.knob_values_limited = [];
         this.knob_index = null;
 
+
+        this.knob_seconds = [0, 0, 0, 0, 0, 0];
+        this.knob_angles = [0, 0, 0, 0, 0, 0];
+
+
         //  Display Image Trigger
-        this.initDisplay();
+        //this.initDisplay();
     }
 
     //  BEHAVOIR
     initDisplay() {
-        this.initialSetup();
-        this.SetDeviceParams();
-    }
-
-    //      INITIAL SETUP
-    initialSetup() {
         this.resize_svg(false);
         this.manageHandler();
+        //this.SetDeviceParams();
     }
 
     resize_svg(reload_on_resize) {
@@ -51,29 +51,26 @@ class Display {
             slf.resize_svg(true);
         });
     }
-    //      !!! INITIAL SETUP
 
-    SetDeviceParams() {
-        var knob_labels = [];
-        knob_labels.push(['Delay [s]', 'Step up [s]', 'Step down [s]']);
-        knob_labels.push(['Delay [s]', 'Sustain [s]', 'Decay [s]', 'Amp/step [s]', 'Max. Amp [s]']);
+    // SetDeviceParams() {
+    //     var knob_labels = [];
+    //     knob_labels.push(['Delay [s]', 'Step up [s]', 'Step down [s]']);
+    //     knob_labels.push(['Delay [s]', 'Sustain [s]', 'Decay [s]', 'Amp/step [s]', 'Max. Amp [s]']);
 
-        var knob_max_value = [];
-        knob_max_value.push([5, 20, 0, 0, 0, 0]);
+    //     var knob_max_value = [];
+    //     knob_max_value.push([5, 20, 0, 0, 0, 0]);
 
-        this.knob_labels = knob_labels;
-        this.knob_max_value = knob_max_value;
-    }
+    //     this.knob_labels = knob_labels;
+    //     this.knob_max_value = knob_max_value;
+    // }
 
-    SET_KnobValues(knob_values_raw, index) {
-        console.log(index)
-        if (index == null) {
-            this.knob_values_raw = knob_values_raw;
-        } else {
-            this.knob_values_raw[index] = knob_values_raw;
-            this.knob_index = index;
-        }
-        this.refreshDisplay();
+    setKnobValues(knob_angles, knob_seconds) {
+        this.knob_angles = knob_angles;
+        this.knob_seconds = knob_seconds;
+        console.log(knob_angles)
+        console.log(knob_seconds)
+
+        // this.refreshDisplay();
     }
     //  !!! BEHAVOIR
 

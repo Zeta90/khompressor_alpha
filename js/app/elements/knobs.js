@@ -1,5 +1,5 @@
 class KnobAnalog extends Display {
-    constructor(SYSTEM_DELTA_T, SAMPLES) {
+    constructor(SYSTEM_DELTA_T, SAMPLES, selected_template) {
         //  Initializing the Display
         super(SYSTEM_DELTA_T, SAMPLES)
 
@@ -8,38 +8,51 @@ class KnobAnalog extends Display {
         this.SAMPLES = SAMPLES
 
         //  Init Knobs Array
-        this.knob_values_raw = [0, 0, 0, 0, 0, 0];
+
+        this.knob_seconds = [0, 0, 0, 0, 0, 0];
+        this.knob_angles = [0, 0, 0, 0, 0, 0];
+
         this.knob_template_values = [];
         this.knob_template_limits = [];
 
+        // this.selected_template = selected_template;
+        this.selected_template = 0;
+        this.current_template_values = [];
+        this.current_template_limits = [];
         //  Init Knob functionality
-        this.initKnob();
+        this.initKnobs();
     }
 
-    //  ROTATION TRIGGERING
-    onRotateKnob(index) {
-        super.SET_KnobValues(this.knob_values_raw[index], index);
-    }
-
-
-
-    killTweens() {
-        TweenLite.killTweensOf([this.knob]);
-    }
-    //  !!! ROTATION TRIGGERING
-
-    initKnob() {
+    //  INIT AND SETUP
+    initKnobs() {
         this.SetKnobParams();
-        this.initializingKnobs();
+        this.defineKnobs();
     }
 
     SetKnobParams() {
         this.knob_template_values.push([5, 15, 0, 0, 0, 0]);
 
-        this.knob_template_values.push([0,5]);
+        this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
+
+        this.current_template_values = this.knob_template_values[this.selected_template];
+        this.current_template_limits = this.knob_template_limits[this.selected_template];
+    }
+    //  **********************
+
+    killTweens() {
+        TweenLite.killTweensOf([this.knob]);
     }
 
-    initializingKnobs() {
+    updateInitialRotation() {
+        for (var i = 0; i < 6; i++) {
+            TweenMax.set(this.knob[i], {
+                rotation:
+                    this.knob_angles[i]
+            });
+        }
+    }
+
+    defineKnobs() {
         this.knob = $(".knob_wheel_wave");
         var slf = this;
         Draggable.create(this.knob, {
@@ -51,79 +64,73 @@ class KnobAnalog extends Display {
                 slf.killTweens();
             },
             onDrag: function () {
-                var index = $(this.target).attr('accesskey');
-                var angle = $(this)[0].endRotation
-                slf.knob_values_raw[index] = angle;
-                slf.tickManager(angle, this);
-                slf.onRotateKnob(index);
+                slf.rotationEvent(this);
             },
             onThrowUpdate: function () {
-                var index = $(this.target).attr('accesskey');
-                var angle = $(this)[0].endRotation
-                slf.knob_values_raw[index] = angle;
-                slf.tickManager(angle, this);
-                slf.onRotateKnob(index);
+                slf.rotationEvent(this);
             },
             snap: function (endValue) {
             }
         });
-        super.SET_KnobValues(this.knob_values_raw);
-        this.tickManager();
-        this.updateRotation(0);
+
+        this.setInitialKnobParams();    //  Sets the class vars (initial) | knob_angles AND knob_seconds |
+        this.updateInitialRotation();   //  Sets the initial knob position
+        this.ledsTickOn();              //  Turns on the leds
+        this.setSuperData();
     }
 
-    getTemplateInitialDegValues(index) {
-        //this.knob_template_values; //[5 15 0 0 0 0]
-        return this.knob_template_values[0][index];
+    setInitialKnobParams() {
+        var slf = this;
+        $.each(this.knob, function (i, el) {
+            var limits = slf.current_template_limits[i];
+            var time_range = limits[1] - limits[0];
+
+            var seconds = slf.current_template_values[i];
+            var angle = slf.current_template_values[i] * (270 / time_range);
+
+            slf.knob_angles[i] = angle;
+            slf.knob_seconds[i] = seconds;
+        })
     }
 
-    tickManager(angle, container) {
-        var leds_on = 1;
-        if (angle == null && container == null) {
-            var ticks = $('#knobBG .ticks')
-            var slf = this;
-            $.each(ticks, function (i, eli) {
-                var tick = $(eli).find('.tick')
-                var current_initial_value = slf.getTemplateInitialDegValues(i);
+    rotationEvent(knob) {
+        var index = $(knob.target).attr('accesskey');
+        var angle = $(knob)[0].endRotation
+        var limits = this.knob_template_limits[this.selected_template][index];
+        var time_range = limits[1] - limits[0];
+        var seconds = angle * time_range / 270
 
-                var current_angle = 0;
+        this.knob_angles[index] = angle;
+        this.knob_seconds[index] = seconds;
+        this.ledsTickOn();
+        this.setSuperData(index);
+    }
 
-                if (i == 0) {
-                    current_angle = current_initial_value * 270 / 5;
-                } else {
-                    current_angle = current_initial_value * 270 / 20;
-                }
+    //  SUPER - DISPLAY
+    setSuperData(index) {
+        super.setKnobValues(this.knob_angles, this.knob_seconds)
+    }
 
-                leds_on = slf.knobLedManager(current_angle);
-                console.log(current_angle)
+    //  LEDS
+    ledsTickOn() {
+        var ticks = $('#knobBG .ticks')
+        var slf = this;
+        $.each(ticks, function (i, eli) {
+            var current_angle = slf.knob_angles[i];
+            var total_leds_on = slf.ledsManager(current_angle);
+            var tick = $(eli).find('.tick');
 
-                $.each(tick, function (j, elj) {
-                    if (j < leds_on) {
-                        console.log(i)
-                        $(this).attr('class', 'tick on');
-                    } else {
-                        $(this).attr('class', 'tick off');
-                    }
-                })
-            })
-        } else {
-            console.log(angle)
-            leds_on = this.knobLedManager(angle);
-
-            var knob_container = container.target.parentElement;
-            var ticks = $(knob_container).find('.tick')
-            $.each($(ticks), function (i) {
-                if (i < leds_on) {
-                    // console.log(i)
+            $.each(tick, function (j, elj) {
+                if (j < total_leds_on) {
                     $(this).attr('class', 'tick on');
                 } else {
                     $(this).attr('class', 'tick off');
                 }
             })
-        }
+        })
     }
 
-    knobLedManager(angle) {
+    ledsManager(angle) {
         var leds_on = 1;
         if (angle < 27) {
             leds_on = 1;
@@ -150,24 +157,4 @@ class KnobAnalog extends Display {
         }
         return leds_on;
     }
-
-    updateRotation(index) {
-        for (var i = 0; i < 6; i++) {
-            console.log(this.knob_template_values[index])
-            TweenMax.set(this.knob[i], {
-                rotation:
-                    this.knob_template_values[index][i] * 54
-            });
-        }
-    }
-
 }
-
-
-
-
-
-
-
-
-
