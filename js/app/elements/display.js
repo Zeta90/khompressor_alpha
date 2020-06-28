@@ -126,7 +126,7 @@ class Display {
         });
         $(envelope_visualizer).append($bar);
         curr_width += this.knob_seconds[0] * width_second
-        var i = this.knob_seconds[0] * width_second;
+        var i = this.knob_seconds[0];
         while (in_time == true) {
             var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
                 x: curr_width,
@@ -134,7 +134,6 @@ class Display {
                 width: 1,
                 height: 140,
                 stroke: "blue"
-                ,
             });
             $(envelope_visualizer).append($bar);
 
@@ -167,7 +166,7 @@ class Display {
             $(envelope_visualizer).append($bar);
             curr_width += this.knob_seconds[2] * width_second
 
-            if (i < (this.SYSTEM_SIMULATION_TIME / this.SYSTEM_DELTA_T)) {
+            if (i < (this.SYSTEM_SIMULATION_TIME)) {
                 i++;
             } else {
                 in_time = false;

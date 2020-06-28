@@ -55,7 +55,6 @@ class KnobAnalog extends Display {
                 $(slf.knob[i]).addClass('active');
             } else {
                 var ticks = $(slf.knob[i]).parent().children('.ticks').children('.tick');
-                console.log($(slf.knob[i]))
                 $(slf.knob[i]).removeClass('active');
                 $(el).html('');
             }

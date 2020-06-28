@@ -1,4 +1,11 @@
+.logo_frame {
+  margin: auto;
+}
 .kHLogo {
+  font-family: "Playball", cursive;
+  text-shadow: 1px 1px 4px #000;
+  color: #001563;
+  font-size: 60px;
 }
 
 /* .device{
@@ -41,12 +48,46 @@
 }
 
 .kh_display.dotted {
-  background: radial-gradient(#191f23 1px, transparent 5px);
-  background-size: 3px 3px;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(255, 255, 255, 0)),
+    color-stop(50%, rgba(255, 255, 255, 0)),
+    color-stop(70%, rgba(0, 0, 0, 0.2)),
+    to(rgba(0, 0, 0, 0.6))
+  );
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.089) 70%,
+    rgba(0, 0, 0, 0.01)
+  );
+  background-size: 100% 0.2rem;
+  border-radius: 10px;
+
+  /* background: radial-gradient(#191f23 1px, transparent 5px);
+  background-size: 3px 3px; */
+}
+.kh_display.dotted .kh_display_glow {
+  background-color: #1bd4597a;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  top: -295px;
+  border-radius: 10px;
+
+  /* -webkit-animation: crt-glow 60s infinite;
+          animation: crt-glow 60s infinite;
+  background: radial-gradient(circle at center, #1bd4597a 0%, rgba(27, 212, 89, 0.48) 58%, rgba(21, 235, 92, 0.57) 80%, rgba(19, 94, 29, 0.27) 93%, rgba(24, 167, 46, 0.1) 100%); */
+  opacity: 0.15;
+  pointer-events: none;
+  /* position: fixed; */
 }
 
 .kh_wave_controls {
-  background-image: -webkit-linear-gradient(bottom, #161616 0%, #a1a4a700 100%);
+  background-image: -webkit-linear-gradient(bottom, #161616 0%, #a1a4a700 30%);
   /* background: rgb(173, 173, 173);
   background: linear-gradient(
     0deg,

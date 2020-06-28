@@ -16,13 +16,13 @@
 }
 
 /*LABELS*/
-.knob_labels{
+.knob_labels {
   margin-top: 15px;
 }
 /**/
 
 body {
-  background-color: #181818;
+  /* background-color: #181818; */
   font-size: 100%;
   font-family: "Open Sans", sans-serif;
   color: #aaa;
@@ -42,7 +42,7 @@ body {
     left bottom,
     left top,
     color-stop(0, #191919),
-    color-stop(1, #310f0f)
+    color-stop(1, #333e46)
   );
   background: -ms-linear-gradient(bottom, #1d1d1d, #131313);
   background: -moz-linear-gradient(center bottom, #1d1d1d 0%, #131313 100%);
@@ -80,13 +80,12 @@ body {
   background-color: #503700;
   border-radius: 50%;
 }
-.knob_wheel_wave.active:before{
+.knob_wheel_wave.active:before {
   background-color: #ffb000;
   -webkit-box-shadow: 0 0 0.4em 0 #79c3f4;
   -moz-box-shadow: 0 0 0.4em 0 #79c3f4;
   box-shadow: 0 0 0.4em 0 #ffffff;
 }
-
 
 .min,
 .max {
