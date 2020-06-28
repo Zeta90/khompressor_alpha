@@ -14,6 +14,13 @@
     url(https://fonts.gstatic.com/s/varelaround/v12/w8gdH283Tvk__Lua32TysjIfp8uK.ttf)
       format("truetype");
 }
+
+/*LABELS*/
+.knob_labels{
+  margin-top: 15px;
+}
+/**/
+
 body {
   background-color: #181818;
   font-size: 100%;
@@ -70,12 +77,17 @@ body {
   left: 19%;
   width: 7%;
   height: 7%;
-  background-color: #ffb000;
+  background-color: #503700;
   border-radius: 50%;
+}
+.knob_wheel_wave.active:before{
+  background-color: #ffb000;
   -webkit-box-shadow: 0 0 0.4em 0 #79c3f4;
   -moz-box-shadow: 0 0 0.4em 0 #79c3f4;
   box-shadow: 0 0 0.4em 0 #ffffff;
 }
+
+
 .min,
 .max {
   display: block;
@@ -103,7 +115,6 @@ body {
   left: 0;
   z-index: 5;
   overflow: visible;
-
 }
 .tick:after {
   content: "";
@@ -129,12 +140,12 @@ body {
   transition: all 50ms ease-in;
 }
 
-.tick.off:after{
-    opacity: 0.1;
+.tick.off:after {
+  opacity: 0.1;
 }
 
-.tick.on:after{
-    opacity: 0.8;
+.tick.on:after {
+  opacity: 0.8;
 }
 
 .tick:nth-child(1):after,
@@ -147,7 +158,7 @@ body {
   background-color: rgba(216, 216, 202, 1);
 }
 
-.tick:nth-child(6):after{
+.tick:nth-child(6):after {
   background-color: rgb(0, 217, 255);
 }
 

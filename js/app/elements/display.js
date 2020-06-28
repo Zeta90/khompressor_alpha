@@ -1,27 +1,8 @@
 class Display {
     constructor(SYSTEM_DELTA_T, SAMPLES) {
-
-
         this.SYSTEM_DELTA_T = SYSTEM_DELTA_T
         this.SAMPLES = SAMPLES
         this.SYSTEM_SIMULATION_TIME = SYSTEM_DELTA_T * SAMPLES;
-
-        // Defines if the Wave template has already loaded
-        this.is_template_loaded = false;
-        this.default_template_ready = true;
-
-        // Defines if the Wave template has already loaded
-        this.knob_values_raw = null;
-        this.knob_values_limited = [];
-        this.knob_index = null;
-
-
-        //  ***********************************************
-        //  ***********************************************
-        //  ***********************************************
-        //  ***********************************************
-        //  ***********************************************
-
 
         //  SCREEN PARAMS
         this.screen_width = $('.kh_display_board').width();
@@ -36,36 +17,30 @@ class Display {
         this.initDisplay();
     }
 
-    //  BEHAVOIR
     initDisplay() {
         this.resize_svg(false);
         this.manageHandler();
     }
 
-    resize_svg(reload_on_resize) {
+    resize_svg() {
         var screen_width = $('.kh_display');
         var fit_screen = $('.kh_display_board');
         this.screen_width = screen_width.width();
         $(fit_screen).width(screen_width.width())
+        this.refreshDisplay();
 
-        if (reload_on_resize == true) {
-            this.refreshDisplay();
-        }
     }
 
     manageHandler() {
         var slf = this;
         window.addEventListener('resize', function () {
-            slf.resize_svg(true);
+            slf.resize_svg();
         });
     }
 
     setFromChildKnobValues(knob_angles, knob_seconds) {
         this.knob_angles = knob_angles;
         this.knob_seconds = knob_seconds;
-        console.log(knob_angles)
-        console.log(knob_seconds)
-
         this.refreshDisplay();
     }
 
@@ -200,12 +175,4 @@ class Display {
             }
         }
     }
-
-    limit_knob_values(value, index) {
-        this.knob_values_limited = this.knob_max_value[0]
-        this.knob_values_raw[index] = value// * (knob_values_limited[index] / 360)
-    }
-
-
-
 }

@@ -14,11 +14,13 @@ class KnobAnalog extends Display {
 
         this.knob_template_values = [];
         this.knob_template_limits = [];
+        this.knob_template_labels = []
 
         // this.selected_template = selected_template;
         this.selected_template = 0;
         this.current_template_values = [];
         this.current_template_limits = [];
+        this.current_template_labels = [];
         //  Init Knob functionality
         this.initKnobs();
     }
@@ -30,12 +32,34 @@ class KnobAnalog extends Display {
     }
 
     SetKnobParams() {
+        this.knob = $(".knob_wheel_wave");
         this.knob_template_values.push([5, 15, 0, 0, 0, 0]);
 
         this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
 
+        this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]'])
+
         this.current_template_values = this.knob_template_values[this.selected_template];
         this.current_template_limits = this.knob_template_limits[this.selected_template];
+        this.current_template_labels = this.knob_template_labels[this.selected_template];
+    }
+
+    printKnobLabels() {
+        var knob_labels = $('.knob_labels .label_container .lbl_glow');
+        var slf = this;
+        $.each(knob_labels, function (i, el) {
+            if (i < slf.current_template_labels.length) {
+                var lbl_val = slf.current_template_labels[i];
+                $(el).html(lbl_val);
+                $(slf.knob[i]).removeClass('active');
+                $(slf.knob[i]).addClass('active');
+            } else {
+                var ticks = $(slf.knob[i]).parent().children('.ticks').children('.tick');
+                console.log($(slf.knob[i]))
+                $(slf.knob[i]).removeClass('active');
+                $(el).html('');
+            }
+        })
     }
     //  **********************
 
@@ -53,7 +77,6 @@ class KnobAnalog extends Display {
     }
 
     defineKnobs() {
-        this.knob = $(".knob_wheel_wave");
         var slf = this;
         Draggable.create(this.knob, {
             type: "rotation",
@@ -73,6 +96,7 @@ class KnobAnalog extends Display {
             }
         });
 
+        this.printKnobLabels();
         this.setInitialKnobParams();    //  Sets the class vars (initial) | knob_angles AND knob_seconds |
         this.updateInitialRotation();   //  Sets the initial knob position
         this.ledsTickOn();              //  Turns on the leds
@@ -121,8 +145,13 @@ class KnobAnalog extends Display {
             var tick = $(eli).find('.tick');
 
             $.each(tick, function (j, elj) {
+
                 if (j < total_leds_on) {
-                    $(this).attr('class', 'tick on');
+                    if ($(slf.knob[i]).hasClass('active')) {
+                        $(this).attr('class', 'tick on');
+                    } else {
+                        $(this).attr('class', 'tick off');
+                    }
                 } else {
                     $(this).attr('class', 'tick off');
                 }
