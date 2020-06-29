@@ -13,6 +13,8 @@ class Display {
         this.knob_seconds = [0, 0, 0, 0, 0, 0];
         this.knob_angles = [0, 0, 0, 0, 0, 0];
 
+        this.selected_template = 2;
+
         //  Display Image Trigger
         this.initDisplay();
     }
@@ -30,7 +32,7 @@ class Display {
 
         var glow = $('.kh_display_glow');
         $(glow).css('width', screen_width.width() + 2 + 'px')
-        .css('height', screen_width.height() + 2 + 'px');
+            .css('height', screen_width.height() + 2 + 'px');
 
         this.refreshDisplay();
 
@@ -103,12 +105,15 @@ class Display {
     }
 
     EnvelopeTemplates() {
-        switch (parseInt(0)) {
+        switch (this.selected_template) {
             case 0: //  STEP
                 this.StepEnvelope_template();
                 break;
             case 1:
-                this.StepEnvelope_template();
+                this.SawEnvelope_template();
+                break;
+            case 2:
+                this.SineEnvelope_template();
                 break;
         }
 
@@ -177,6 +182,111 @@ class Display {
                 in_time = false;
                 i = 0;
             }
+        }
+    }
+
+    SawEnvelope_template() {
+        var envelope_visualizer = $('.kh_display_board');
+        var width = 1.82 * (this.screen_width);
+        var width_second = (width / this.SYSTEM_SIMULATION_TIME) - 2 * this.screen_width_offset / this.SYSTEM_SIMULATION_TIME
+
+        var in_time = true;
+        var curr_width = this.screen_width_offset;
+
+        var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
+            x: curr_width,
+            y: 290,
+            width: this.knob_seconds[0] * width_second,
+            height: 1,
+            stroke: "red"
+        });
+        $(envelope_visualizer).append($bar);
+        curr_width += this.knob_seconds[0] * width_second
+        var i = this.knob_seconds[0];
+        while (in_time == true) {
+            var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "path")).attr({
+                d: "M" + (curr_width) + "," + 290 +
+                    " L" + (curr_width + this.knob_seconds[1] * width_second * (this.knob_seconds[3]))
+                    + "," + 150,
+                // y: 150,
+                // width: 1,
+                // height: 140,
+                stroke: "blue"
+            });
+            $(envelope_visualizer).append($bar);
+
+            var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "path")).attr({
+                d: "M" + (curr_width + this.knob_seconds[1] * width_second * (this.knob_seconds[3])) + "," + 150 +
+                    " L" + (curr_width + this.knob_seconds[1] * width_second) + "," + 290,
+                // y: 150,
+                // width: 1,
+                // height: 140,
+                stroke: "yellow"
+            });
+            $(envelope_visualizer).append($bar);
+            curr_width += (this.knob_seconds[1]) * width_second;
+
+            var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
+                x: curr_width,
+                y: 290,
+                width: this.knob_seconds[2] * width_second,
+                height: 1,
+                stroke: "magenta"
+            });
+            $(envelope_visualizer).append($bar);
+            curr_width += this.knob_seconds[2] * width_second
+
+            if (i < (this.SYSTEM_SIMULATION_TIME)) {
+                i++;
+            } else {
+                in_time = false;
+                i = 0;
+            }
+        }
+    }
+
+    SineEnvelope_template() {
+        var envelope_visualizer = $('.kh_display_board');
+        var width = 1.82 * (this.screen_width);
+        var width_second = (width / this.SYSTEM_SIMULATION_TIME) - 2 * this.screen_width_offset / this.SYSTEM_SIMULATION_TIME
+
+        var in_time = true;
+        var curr_width = this.screen_width_offset;
+
+        var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
+            x: curr_width,
+            y: 290,
+            width: this.knob_seconds[0] * width_second,
+            height: 1,
+            stroke: "red"
+        });
+        $(envelope_visualizer).append($bar);
+        curr_width += this.knob_seconds[0] * width_second
+        var i = this.knob_seconds[0];
+
+
+        console.log(this.knob_seconds[1])
+        var amplitude = 200; // wave amplitude
+        var freq = 1 / this.knob_seconds[1]; // angular frequency
+        var rate = (2 * Math.PI) * freq; // point spacing
+        var phase = this.knob_seconds[2] * (2 * Math.PI) / 180; // phase angle
+
+        var width_point = (width / this.SYSTEM_SIMULATION_TIME) - 2 * this.screen_width_offset / this.SYSTEM_SIMULATION_TIME
+
+        var time_limit = 1 + (this.SYSTEM_SIMULATION_TIME - this.knob_seconds[0]) * 10
+
+        for (var i = 1; i < time_limit; i++) {
+            var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+            line.setAttribute('x1', ((i) - 1) * width_point / 10 + curr_width);
+            line.setAttribute('y1', -Math.sin((i - 1) * rate / 10 + phase) * amplitude + 290);
+
+            line.setAttribute('x2', i * width_point / 10 + curr_width);
+            line.setAttribute('y2', -Math.sin((i * rate / 10) + phase) * amplitude + 290);
+
+            line.setAttribute('style', "stroke:red;stroke-width:2   ");
+
+            $(envelope_visualizer).append(line);
         }
     }
 }

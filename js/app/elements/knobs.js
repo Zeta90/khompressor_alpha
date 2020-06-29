@@ -17,7 +17,7 @@ class KnobAnalog extends Display {
         this.knob_template_labels = []
 
         // this.selected_template = selected_template;
-        this.selected_template = 0;
+        this.selected_template = 2;
         this.current_template_values = [];
         this.current_template_limits = [];
         this.current_template_labels = [];
@@ -34,10 +34,16 @@ class KnobAnalog extends Display {
     SetKnobParams() {
         this.knob = $(".knob_wheel_wave");
         this.knob_template_values.push([5, 15, 0, 0, 0, 0]);
+        this.knob_template_values.push([5, 5, 1, 0.75, 0, 0]);
+        this.knob_template_values.push([5, 1, 90, 0.75, 0, 0]);
 
         this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
+        this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 1], [0, 20], [0, 20]]);
+        this.knob_template_limits.push([[0, 5], [0, 10], [0, 180], [0, 1], [0, 20], [0, 20]]);
 
         this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]'])
+        this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]','Proportion [%]'])
+        this.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]'])
 
         this.current_template_values = this.knob_template_values[this.selected_template];
         this.current_template_limits = this.knob_template_limits[this.selected_template];
