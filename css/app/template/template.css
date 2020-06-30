@@ -33,7 +33,11 @@
 .kh_case {
   padding: 20px;
   border-radius: 5px;
-  background: radial-gradient(circle, rgb(21, 21, 21) 0%, rgba(54, 90, 218, 0.54) 100%)
+  background: radial-gradient(
+    circle,
+    rgb(21, 21, 21) 0%,
+    rgba(54, 90, 218, 0.54) 100%
+  );
 
   /* background: rgb(63, 61, 61);
   background: linear-gradient(90deg, rgb(130, 132, 133) 27%, rgba(233,249,255,0.7679446778711485) 55%, rgba(238,253,255,0.6) 84%); */
@@ -78,7 +82,7 @@
   border-radius: 10px;
   /* margin-top: -295px; */
 
-  opacity: 0.0;
+  opacity: 0;
   /* pointer-events: none; */
   /* background: -webkit-gradient(
     linear,
@@ -118,7 +122,6 @@
   border-style: solid;
   border-width: 2px;
   margin-bottom: 10px;
-
 }
 .digital_btn .db {
   width: auto;
@@ -305,4 +308,22 @@
 }
 .kh_led_btn:nth-child(3) {
   width: 32% !important;
+}
+
+.osc_btn {
+  background-size: 80px;
+  background-position-x: -14px;
+  background-position-y: -15px;
+}
+
+.osc_btn_bg{
+  background-size: 70px;
+  background-position-x: -10px;
+  background-position-y: -15px;
+}
+
+.osc_btn_bg:hover{
+  -webkit-box-shadow: 0px 0px 29px 1px rgba(255, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 29px 1px rgba(255, 0, 0, 0.75);
+  box-shadow: 0px 0px 29px 1px rgba(255, 0, 0, 0.75);
 }

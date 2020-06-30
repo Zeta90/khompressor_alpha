@@ -1,56 +1,90 @@
-// $(document).ready(function () {
-//     //var plotting_waves = new PlottingWaves();
-//     //var waveshaper = new WaveControls();
-
-
-
-//     // waveshaper.PrintInitialLabels();
-//     // // var shapecontrols = LoadDeviceVisualization();
-//     // // console.log(shapecontrols[0].value)
-
-
-//     // plotting_waves.load_input_plot(true);
-
-//     var collector_ext = null;
-//     var device = new Device();
-
-//     $('.selectwave_btn').click(function () {
-//         var wave_btn = $(this).attr('accesskey')
-//         $('.selectwave_btn.active').removeClass('active')
-//         $(this).addClass('active')
-//         device.wave_shape = wave_btn;
-//         device.InitializeEnvelope()
-//         //AnimateWheelsPanel();
-//         console.log(device.wave_shape);
-//     });
-
-// })
-
 $(document).ready(function () {
     //  RUN
-    var device;
-    var device = new Device();
+    Device.oscillator.initDevice();
 })
 
 class Device {
-    constructor() {
-        //  SYSTEM CONSTANTS
-        this.SYSTEM_DELTA_T = 0.1
-        this.SAMPLES = 200
+    //  SYSTEM SETTINGS
+    static settings = {
+        SYSTEM_DELTA_T: 0.1,
+        SYSTEM_SIMULATION_SAMPLES: 200,
+        SYSTEM_SIMULATION_TIME: 20,
 
-        // // Knobs (wheels)
-        // this.knob_labels = [];
+        knobs: [],
+        knob_angles: [0, 0, 0, 0, 0, 0],
+        knob_seconds: [0, 0, 0, 0, 0, 0],
 
-        // //  Waves
-        // this.wave_index = 0;
+        max_knob_rotation: 270,
 
-        //  MAIN TRIGGER
-        this.runOscillator()
-        //  MAIN TRIGGER
+        selected_template: 0,
+
+        screen_width: $('.kh_display_board').width(),
+        screen_width_offset: 20,
+
+        knob_template_values: [],
+        knob_template_limits: [],
+        knob_template_labels: [],
+
+        current_template_values: [],
+        current_template_limits: [],
+        current_template_labels: [],
+    };
+
+    static classes = {
+        _Knobs: null,
+        _Display: null,
     }
 
-    runOscillator() {
-        new KnobAnalog(this.SYSTEM_DELTA_T, this.SAMPLES)
+    static oscillator = {
+        initDevice: function () {
+            this.loadTriggers();
+            this.defineTemplateSettings();
+
+            this.resetDevice();
+        },
+
+        defineTemplateSettings() {
+            Device.settings.knob_template_values.push([5, 15, 0, 0, 0, 0]);
+            Device.settings.knob_template_values.push([5, 5, 1, 0.75, 0, 0]);
+            Device.settings.knob_template_values.push([5, 1, 90, 0.75, 0, 0]);
+
+            Device.settings.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
+            Device.settings.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 1], [0, 20], [0, 20]]);
+            Device.settings.knob_template_limits.push([[0, 5], [0, 10], [0, 180], [0, 1], [0, 20], [0, 20]]);
+
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]'])
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]', 'Proportion [%]'])
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]'])
+        },
+
+        loadTriggers() {
+            var slf = this;
+            //  SELECT TEMPLATE BUTTONS
+            $('.osc_btn').click(function () {
+                var template = $(this).attr('itemid');
+                Device.settings.selected_template = parseInt(template);
+
+                slf.resetDevice();
+            })
+        },
+
+        refreshDisplay() {
+            Device.classes._Display.refreshDisplay();
+        },
+
+        selectTemplateValues() {
+            Device.settings.current_template_values = Device.settings.knob_template_values[Device.settings.selected_template];
+            Device.settings.current_template_limits = Device.settings.knob_template_limits[Device.settings.selected_template];
+            Device.settings.current_template_labels = Device.settings.knob_template_labels[Device.settings.selected_template];
+        },
+
+        resetDevice() {
+            this.selectTemplateValues();
+
+            Device.classes._Knobs = new KnobAnalog();
+            Device.classes._Display = new Display();
+            Device.classes._Display.refreshDisplay();
+        }
     }
 }
 

@@ -1,67 +1,70 @@
-class KnobAnalog extends Display {
-    constructor(SYSTEM_DELTA_T, SAMPLES, selected_template) {
-        //  Initializing the Display
-        super(SYSTEM_DELTA_T, SAMPLES)
-
+class KnobAnalog {
+    constructor() {
         //  SYSTEM CONSTANTS
-        this.SYSTEM_DELTA_T = SYSTEM_DELTA_T
-        this.SAMPLES = SAMPLES
+        this.SYSTEM_DELTA_T = Device.settings.SYSTEM_DELTA_T
+        this.SAMPLES = Device.settings.SYSTEM_SIMULATION_SAMPLES
 
         //  Init Knobs Array
 
-        this.knob_seconds = [0, 0, 0, 0, 0, 0];
-        this.knob_angles = [0, 0, 0, 0, 0, 0];
+        this.knob_seconds = Device.settings.knob_seconds;
+        this.knob_angles = Device.settings.knob_angles;
 
         this.knob_template_values = [];
         this.knob_template_limits = [];
         this.knob_template_labels = []
 
         // this.selected_template = selected_template;
-        this.selected_template = 2;
+        this.selected_template = Device.settings.selected_template;
         this.current_template_values = [];
         this.current_template_limits = [];
         this.current_template_labels = [];
         //  Init Knob functionality
+
+        this.device_settings = Device.settings;
+        this.oscillator = Device.oscillator;
+
         this.initKnobs();
     }
 
     //  INIT AND SETUP
     initKnobs() {
-        this.SetKnobParams();
+        // this.SetKnobParams();
         this.defineKnobs();
     }
 
     SetKnobParams() {
-        this.knob = $(".knob_wheel_wave");
-        this.knob_template_values.push([5, 15, 0, 0, 0, 0]);
-        this.knob_template_values.push([5, 5, 1, 0.75, 0, 0]);
-        this.knob_template_values.push([5, 1, 90, 0.75, 0, 0]);
 
-        this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
-        this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 1], [0, 20], [0, 20]]);
-        this.knob_template_limits.push([[0, 5], [0, 10], [0, 180], [0, 1], [0, 20], [0, 20]]);
+        // this.knob_template_values.push([5, 15, 0, 0, 0, 0]);
+        // this.knob_template_values.push([5, 5, 1, 0.75, 0, 0]);
+        // this.knob_template_values.push([5, 1, 90, 0.75, 0, 0]);
 
-        this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]'])
-        this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]','Proportion [%]'])
-        this.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]'])
+        // this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
+        // this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 1], [0, 20], [0, 20]]);
+        // this.knob_template_limits.push([[0, 5], [0, 10], [0, 180], [0, 1], [0, 20], [0, 20]]);
 
-        this.current_template_values = this.knob_template_values[this.selected_template];
-        this.current_template_limits = this.knob_template_limits[this.selected_template];
-        this.current_template_labels = this.knob_template_labels[this.selected_template];
+        // this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]'])
+        // this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]','Proportion [%]'])
+        // this.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]'])
+
+        // this.device_settings.current_template_values = this.device_settings.knob_template_values[this.device_settings.selected_template];
+        // this.device_settings.current_template_limits = this.device_settings.knob_template_limits[this.device_settings.selected_template];
+        // this.device_settings.current_template_labels = this.device_settings.knob_template_labels[this.device_settings.selected_template];
     }
 
     printKnobLabels() {
         var knob_labels = $('.knob_labels .label_container .lbl_glow');
         var slf = this;
         $.each(knob_labels, function (i, el) {
-            if (i < slf.current_template_labels.length) {
-                var lbl_val = slf.current_template_labels[i];
+            console.log(slf.device_settings.current_template_labels)
+            if (i < slf.device_settings.current_template_labels.length) {
+                var lbl_val = slf.device_settings.current_template_labels[i];
                 $(el).html(lbl_val);
-                $(slf.knob[i]).removeClass('active');
-                $(slf.knob[i]).addClass('active');
+                console.log(slf.device_settings.knob)
+                $(slf.device_settings.knob[i]).removeClass('active');
+                $(slf.device_settings.knob[i]).addClass('active');
             } else {
-                var ticks = $(slf.knob[i]).parent().children('.ticks').children('.tick');
-                $(slf.knob[i]).removeClass('active');
+                var ticks = $(slf.device_settings.knob[i]).parent().children('.ticks').children('.tick');
+                $(slf.device_settings.knob[i]).removeClass('active');
                 $(el).html('');
             }
         })
@@ -69,25 +72,27 @@ class KnobAnalog extends Display {
     //  **********************
 
     killTweens() {
-        TweenLite.killTweensOf([this.knob]);
+        TweenLite.killTweensOf([this.device_settings.knob]);
     }
 
     updateInitialRotation() {
         for (var i = 0; i < 6; i++) {
-            TweenMax.set(this.knob[i], {
+            TweenMax.set(this.device_settings.knob[i], {
                 rotation:
-                    this.knob_angles[i]
+                    this.device_settings.knob_angles[i]
             });
         }
+        // this.oscillator.refreshDisplay();
     }
 
     defineKnobs() {
+        this.device_settings.knob = $(".knob_wheel_wave");
         var slf = this;
-        Draggable.create(this.knob, {
+        Draggable.create(slf.device_settings.knob, {
             type: "rotation",
             throwProps: true,
             edgeResistance: 1,
-            bounds: { minRotation: 0, maxRotation: 270 },
+            bounds: { minRotation: 0, maxRotation: slf.device_settings.max_knob_rotation },
             onDragStart: function () {
                 slf.killTweens();
             },
@@ -105,54 +110,53 @@ class KnobAnalog extends Display {
         this.setInitialKnobParams();    //  Sets the class vars (initial) | knob_angles AND knob_seconds |
         this.updateInitialRotation();   //  Sets the initial knob position
         this.ledsTickOn();              //  Turns on the leds
-        this.setSuperData();
+        // this.setSuperData();
     }
 
     setInitialKnobParams() {
         var slf = this;
-        $.each(this.knob, function (i, el) {
-            var limits = slf.current_template_limits[i];
+        $.each(slf.device_settings.knob, function (i, el) {
+            var limits = slf.device_settings.current_template_limits[i];
             var time_range = limits[1] - limits[0];
 
-            var seconds = slf.current_template_values[i];
-            var angle = slf.current_template_values[i] * (270 / time_range);
-
-            slf.knob_angles[i] = angle;
-            slf.knob_seconds[i] = seconds;
+            var seconds = slf.device_settings.current_template_values[i];
+            var angle = slf.device_settings.current_template_values[i] * (slf.device_settings.max_knob_rotation / time_range);
+            console.log(slf.device_settings.knob_angles)
+            slf.device_settings.knob_angles[i] = angle;
+            slf.device_settings.knob_seconds[i] = seconds;
         })
     }
 
     rotationEvent(knob) {
         var index = $(knob.target).attr('accesskey');
-        var angle = $(knob)[0].endRotation
-        var limits = this.knob_template_limits[this.selected_template][index];
+        var angle = $(knob)[0].endRotation;
+
+        var limits = this.device_settings.knob_template_limits[this.device_settings.selected_template][index];
         var time_range = limits[1] - limits[0];
-        var seconds = angle * time_range / 270
+        var seconds = angle * time_range / this.device_settings.max_knob_rotation;
 
-        this.knob_angles[index] = angle;
-        this.knob_seconds[index] = seconds;
+        console.log(this.device_settings.knob_angles)
+
+        this.device_settings.knob_angles[index] = angle;
+        this.device_settings.knob_seconds[index] = seconds;
+
         this.ledsTickOn();
-        this.setSuperData(index);
-    }
-
-    //  SUPER - DISPLAY
-    setSuperData(index) {
-        super.setFromChildKnobValues(this.knob_angles, this.knob_seconds)
+        this.oscillator.refreshDisplay();
     }
 
     //  LEDS
     ledsTickOn() {
-        var ticks = $('#knobBG .ticks')
+        var ticks = $('#knobBG .ticks');
         var slf = this;
         $.each(ticks, function (i, eli) {
-            var current_angle = slf.knob_angles[i];
+            var current_angle = slf.device_settings.knob_angles[i];
             var total_leds_on = slf.ledsManager(current_angle);
             var tick = $(eli).find('.tick');
 
             $.each(tick, function (j, elj) {
 
                 if (j < total_leds_on) {
-                    if ($(slf.knob[i]).hasClass('active')) {
+                    if ($(slf.device_settings.knob[i]).hasClass('active')) {
                         $(this).attr('class', 'tick on');
                     } else {
                         $(this).attr('class', 'tick off');
