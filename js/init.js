@@ -28,11 +28,21 @@ class Device {
         current_template_values: [],
         current_template_limits: [],
         current_template_labels: [],
+
+        //  MECHANICS
+        trolley_x: 0,
+        trolley_velocity: 0,
+
+        y: [],
+        // v: [],
+        t: [0],
+
     };
 
     static classes = {
         _Knobs: null,
         _Display: null,
+        _Physics: null,
     }
 
     static oscillator = {
@@ -47,14 +57,17 @@ class Device {
             Device.settings.knob_template_values.push([5, 15, 0, 0, 0, 0]);
             Device.settings.knob_template_values.push([5, 5, 1, 0.75, 0, 0]);
             Device.settings.knob_template_values.push([5, 1, 90, 0.75, 0, 0]);
+            Device.settings.knob_template_values.push([1, 10, 15, 2, 1, 0]);
 
             Device.settings.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
             Device.settings.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 1], [0, 20], [0, 20]]);
             Device.settings.knob_template_limits.push([[0, 5], [0, 10], [0, 180], [0, 1], [0, 20], [0, 20]]);
+            Device.settings.knob_template_limits.push([[0, 2], [0, 20], [0, 50], [0, 20], [0, 20], [0, 20]]);
 
-            Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]'])
-            Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]', 'Proportion [%]'])
-            Device.settings.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]'])
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]']);
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]', 'Proportion [%]']);
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]']);
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Acceleration [s]', 'Max V [rads]' , 'Acc [rads]', 'Braking [rads]']);
         },
 
         loadTriggers() {
@@ -83,7 +96,7 @@ class Device {
 
             Device.classes._Knobs = new KnobAnalog();
             Device.classes._Display = new Display();
-            Device.classes._Display.refreshDisplay();
+            //Device.classes._Display.refreshDisplay();
         }
     }
 }

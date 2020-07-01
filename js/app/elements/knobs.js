@@ -32,34 +32,13 @@ class KnobAnalog {
         this.defineKnobs();
     }
 
-    SetKnobParams() {
-
-        // this.knob_template_values.push([5, 15, 0, 0, 0, 0]);
-        // this.knob_template_values.push([5, 5, 1, 0.75, 0, 0]);
-        // this.knob_template_values.push([5, 1, 90, 0.75, 0, 0]);
-
-        // this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 20], [0, 20], [0, 20]]);
-        // this.knob_template_limits.push([[0, 5], [0, 20], [0, 20], [0, 1], [0, 20], [0, 20]]);
-        // this.knob_template_limits.push([[0, 5], [0, 10], [0, 180], [0, 1], [0, 20], [0, 20]]);
-
-        // this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]'])
-        // this.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]','Proportion [%]'])
-        // this.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]'])
-
-        // this.device_settings.current_template_values = this.device_settings.knob_template_values[this.device_settings.selected_template];
-        // this.device_settings.current_template_limits = this.device_settings.knob_template_limits[this.device_settings.selected_template];
-        // this.device_settings.current_template_labels = this.device_settings.knob_template_labels[this.device_settings.selected_template];
-    }
-
     printKnobLabels() {
         var knob_labels = $('.knob_labels .label_container .lbl_glow');
         var slf = this;
         $.each(knob_labels, function (i, el) {
-            console.log(slf.device_settings.current_template_labels)
             if (i < slf.device_settings.current_template_labels.length) {
                 var lbl_val = slf.device_settings.current_template_labels[i];
                 $(el).html(lbl_val);
-                console.log(slf.device_settings.knob)
                 $(slf.device_settings.knob[i]).removeClass('active');
                 $(slf.device_settings.knob[i]).addClass('active');
             } else {
@@ -82,7 +61,6 @@ class KnobAnalog {
                     this.device_settings.knob_angles[i]
             });
         }
-        // this.oscillator.refreshDisplay();
     }
 
     defineKnobs() {
@@ -121,7 +99,6 @@ class KnobAnalog {
 
             var seconds = slf.device_settings.current_template_values[i];
             var angle = slf.device_settings.current_template_values[i] * (slf.device_settings.max_knob_rotation / time_range);
-            console.log(slf.device_settings.knob_angles)
             slf.device_settings.knob_angles[i] = angle;
             slf.device_settings.knob_seconds[i] = seconds;
         })
@@ -134,8 +111,6 @@ class KnobAnalog {
         var limits = this.device_settings.knob_template_limits[this.device_settings.selected_template][index];
         var time_range = limits[1] - limits[0];
         var seconds = angle * time_range / this.device_settings.max_knob_rotation;
-
-        console.log(this.device_settings.knob_angles)
 
         this.device_settings.knob_angles[index] = angle;
         this.device_settings.knob_seconds[index] = seconds;
@@ -154,7 +129,6 @@ class KnobAnalog {
             var tick = $(eli).find('.tick');
 
             $.each(tick, function (j, elj) {
-
                 if (j < total_leds_on) {
                     if ($(slf.device_settings.knob[i]).hasClass('active')) {
                         $(this).attr('class', 'tick on');
@@ -165,6 +139,7 @@ class KnobAnalog {
                     $(this).attr('class', 'tick off');
                 }
             })
+            
         })
     }
 
