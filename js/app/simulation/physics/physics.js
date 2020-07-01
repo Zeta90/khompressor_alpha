@@ -38,13 +38,13 @@ class Physics {
         j++;
 
         for (i = 0; i < acc_steps; i++) {
-            dt = i * delta_t;
+            dt = (i + 1) * delta_t;
             dt_j = j * delta_t;
 
             if (trolley_velocity < VELOCITY_MAX) {
                 trolley_x = 0.5 * ACCELERATION_MOV * Math.pow(dt, 2);
                 trolley_velocity = (ACCELERATION_MOV * dt);
-                if(trolley_velocity>VELOCITY_MAX){
+                if (trolley_velocity > VELOCITY_MAX) {
                     trolley_velocity = VELOCITY_MAX;
                 }
                 tx = trolley_x;
@@ -58,6 +58,11 @@ class Physics {
 
             t.push(dt_j);
             y.push(trolley_x);
+
+            if (trolley_x > device_settings.max_trolley_x) {
+                device_settings.max_trolley_x = trolley_x;
+            }
+
         }
 
         state_trolley_x = trolley_x;
@@ -65,7 +70,7 @@ class Physics {
         k = 0;
 
         for (i = 0; i < brk_steps; i++) {
-            dt = (i+1) * delta_t;
+            dt = (i + 1) * delta_t;
 
             if (trolley_velocity > 0) {
                 trolley_x = state_trolley_x +
@@ -73,7 +78,7 @@ class Physics {
                     - 0.5 * ACCELERATION_BRK * Math.pow(dt, 2);
 
                 trolley_velocity = state_trolley_velocity - (ACCELERATION_BRK * dt)
-                if(trolley_velocity<0){
+                if (trolley_velocity < 0) {
                     trolley_velocity = 0;
                 }
                 tx = trolley_x;
@@ -89,6 +94,10 @@ class Physics {
 
             t.push(dt_j);
             y.push(trolley_x);
+
+            if (trolley_x > device_settings.max_trolley_x) {
+                device_settings.max_trolley_x = trolley_x;
+            }
         }
         device_settings.t = t;
         device_settings.y = y;

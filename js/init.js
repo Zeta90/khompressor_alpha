@@ -19,7 +19,12 @@ class Device {
         selected_template: 0,
 
         screen_width: $('.kh_display_board').width(),
-        screen_width_offset: 20,
+        screen_width_offset: 50,
+
+        screen_h: $('.kh_display_board').height(),
+        screen_h_offset: 20,
+
+        sreen_rate : 1.82,
 
         knob_template_values: [],
         knob_template_limits: [],
@@ -32,6 +37,7 @@ class Device {
         //  MECHANICS
         trolley_x: 0,
         trolley_velocity: 0,
+        max_trolley_x:0,
 
         y: [],
         // v: [],
@@ -67,7 +73,7 @@ class Device {
             Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]']);
             Device.settings.knob_template_labels.push(['Delay [s]', 'Step time [s]', 'Step off [s]', 'Proportion [%]']);
             Device.settings.knob_template_labels.push(['Delay [s]', 'Frequency [Hz]', 'Phase [rads]']);
-            Device.settings.knob_template_labels.push(['Delay [s]', 'Acceleration [s]', 'Max V [rads]' , 'Acc [rads]', 'Braking [rads]']);
+            Device.settings.knob_template_labels.push(['Delay [s]', 'Acceleration range [s]', 'Max. V [m/s]', 'Acc [rads]', 'Braking [rads]']);
         },
 
         loadTriggers() {

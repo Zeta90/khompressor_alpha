@@ -28,9 +28,12 @@ class Display {
 
     resize_svg() {
         var screen_width = $('.kh_display').width();
+        var screen_height = $('.kh_display').height();
         var fit_screen = $('.kh_display_board');
         this.device_settings.screen_width = screen_width;
+        this.device_settings.screen_h = screen_height;
         $(fit_screen).width(screen_width);
+        $(fit_screen).height(screen_height);
 
         // var glow = $('.kh_display_glow');
         // $(glow).css('width', this.device_settings.screen_width + 2 + 'px')
@@ -55,22 +58,49 @@ class Display {
 
     StaticEnvelopeScenario() {
         var envelope_visualizer = $('.kh_display_board');
-        var width = 1.82 * (this.device_settings.screen_width);
-        var width_second = (width / this.device_settings.SYSTEM_SIMULATION_TIME) - 2 * this.device_settings.screen_width_offset / 20
+        var simulation_time = this.device_settings.SYSTEM_SIMULATION_TIME;
+        var delta_t = this.device_settings.SYSTEM_DELTA_T;
+
+        var max_trolley_x = this.device_settings.max_trolley_x;
+        var sreen_rate = this.device_settings.sreen_rate;
+
+        var screen_width = sreen_rate * (this.device_settings.screen_width);
+        var screen_width_offset = sreen_rate * this.device_settings.screen_width_offset;
+        var screen_h = sreen_rate * (this.device_settings.screen_h);
+        var screen_h_offset = sreen_rate * this.device_settings.screen_h_offset;
+
+        var screen_h_offset_special = -screen_h_offset + screen_h;
+
+        // var width_point = (screen_width / simulation_time) - 2 * screen_width_offset / simulation_time
+        // var height_point = (screen_h / max_trolley_x) - 2 * screen_h_offset / max_trolley_x
+
+
+        var width_second = (screen_width / simulation_time) - 2 * screen_width_offset / simulation_time
+
+        for (var i = 0; i < 10; i++) {
+            var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
+                x: screen_width_offset * 2 - 20,
+                y: screen_h_offset_special * (i / 10) + 20,
+                width: screen_width - 2 * screen_width_offset,
+                height: 0.001,
+                stroke: "#9c9c9c59"
+            });
+            $(envelope_visualizer).append($bar);
+        }
+
+        // var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
+        //     x: screen_width_offset,
+        //     y: 30,
+        //     width: screen_width - 2 * screen_width_offset,
+        //     height: 0.001,
+        //     stroke: "#9c9c9c59"
+        // });
+        // $(envelope_visualizer).append($bar);
 
         var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
-            x: this.device_settings.screen_width_offset,
-            y: 50,
-            width: width - 2 * this.device_settings.screen_width_offset,
-            height: 0.001,
-            stroke: "#9c9c9c59"
-        });
-        $(envelope_visualizer).append($bar);
-
-        var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
-            x: this.device_settings.screen_width_offset,
-            y: 290,
-            width: width - 2 * this.device_settings.screen_width_offset,
+            x: screen_width_offset * 2 - 20,
+            y: screen_h_offset_special + 20,
+            width: screen_width - 2 * screen_width_offset,
             height: 0.1,
             stroke: "#9c9c9c59"
         });
@@ -78,22 +108,22 @@ class Display {
 
         for (var i = 0; i < 21; i++) {
             var $bar = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
-                x: this.device_settings.screen_width_offset + i * width_second,
-                y: 270,
+                x: screen_width_offset * 2 - 20 + i * width_second,
+                y: screen_h_offset_special,
                 width: 0.1,
                 height: 20,
-                stroke: "yellow"
+                stroke: "#36ff00a8"
             });
             $(envelope_visualizer).append($bar);
 
             if (i != 20) {
                 ;
                 var $br = $(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
-                    x: this.device_settings.screen_width_offset + i * width_second + width_second / 2,
-                    y: 280,
+                    x: screen_width_offset * 2 - 20 + i * width_second + width_second / 2,
+                    y: screen_h_offset_special + 10,
                     width: 0.1,
                     height: 10,
-                    stroke: "white"
+                    stroke: "#36ff00a8"
                 });
                 $(envelope_visualizer).append($br);
             }
@@ -119,6 +149,7 @@ class Display {
     }
 
     StepEnvelope_template() {
+
         var envelope_visualizer = $('.kh_display_board');
         var width = 1.82 * (this.device_settings.screen_width);
         var width_second = (width / this.device_settings.SYSTEM_SIMULATION_TIME) - 2 * this.device_settings.screen_width_offset / this.device_settings.SYSTEM_SIMULATION_TIME
@@ -289,145 +320,51 @@ class Display {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // generateSignal() {
-    //     TOTAL_SIMULATION_TIME = 20;
-
-    //     var x = []
-    //     var v = []
-    //     var y = []
-    //     var a = []
-
-
-    //     var i = 0;
-    //     var j = 0;
-
-    //     var curr_point = 0;
-    //     var counter = 0;
-    //     var amp = 0;
-
-    //     var offset_samples = offset_time / self.delta_t;
-
-    //     while (counter < TOTAL_SIMULATION_TIME) {
-    //         if (counter == 0) {
-    //             curr_point += offset_time;
-    //             for (i = 0; i < parseInt(offset_time / self.delta_t); i++) {
-    //                 y.append(0);
-    //             }
-    //             counter += 1;
-    //         } else {
-    //             var amplif = amp;
-    //             curr_point += s_on_time;
-    //             for (i = 0; i < parseInt(s_on_time / self.delta_t); i++) {
-    //                 y.append(amp);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // goRight(i) {
-    //     var delta_t = 0.1;
-    //     var trolley_velocity = 0;
-    //     var trolley_x = 0.0;
-    //     var VELOCITY_MAX = 25;
-    //     var ACCELERATION_MOV = 5;
-    //     var ACCELERATION_BRK = 2;
-
-    //     if (trolley_velocity < VELOCITY_MAX) {
-    //         trolley_x = parseFloat(
-    //             (trolley_x)
-    //             // + (trolley_velocity * delta_t)
-    //             + (0.5 * parseFloat(ACCELERATION_MOV) * (delta_t ^ 2.0))
-    //         );
-    //         trolley_velocity = trolley_velocity + (ACCELERATION_MOV * delta_t)
-    //     } else {
-    //         trolley_x = parseFloat((trolley_x) + (trolley_velocity * delta_t))
-    //         trolley_velocity = VELOCITY_MAX
-    //     }
-    //     // console.log((0.5 * parseFloat(ACCELERATION_MOV) * (delta_t ^ 2.0)))
-
-    //     return [trolley_x, trolley_velocity]
-    // }
-
-    // goBrake(i) {
-    //     var delta_t = 0.1;
-    //     var trolley_velocity = 0;
-    //     var trolley_x = 0.0;
-    //     var VELOCITY_MAX = 25;
-    //     var ACCELERATION_MOV = 5;
-    //     var ACCELERATION_BRK = 2;
-
-    //     if (trolley_velocity < VELOCITY_MAX) {
-    //         trolley_x = parseFloat(
-    //             (trolley_x)
-    //             // + (trolley_velocity * delta_t)
-    //             + (0.5 * parseFloat(ACCELERATION_BRK) * (delta_t ^ 2.0))
-    //         );
-    //         trolley_velocity = trolley_velocity + (ACCELERATION_BRK * delta_t)
-    //     } else {
-    //         trolley_x = parseFloat((trolley_x) + (trolley_velocity * delta_t))
-    //         trolley_velocity = VELOCITY_MAX
-    //     }
-    //     return [trolley_x, trolley_velocity]
-    // }
-
-
-
-
     MechEnvelope_template() {
-
-        var TOTAL_SIMULATION_TIME = 20;
-        var delta_t = 0.1;
-        var smpls = 200;
-
-        var i = 0;
-        var j = 0;
-
-        var curr_point = 0;
-        var counter = 0;
-        var amp = 0;
-
-        var offset_time = 2;
-
-        var offset_samples = offset_time / delta_t;
-
-        Device.settings.x = [0]
-        Device.settings.v = [0]
-        Device.settings.t = []
-
         Physics.goMove()
-
-
-
-
-
-
         var envelope_visualizer = $('.kh_display_board');
-        var width = 1.82 * (this.device_settings.screen_width);
-        var width_second = (width / this.device_settings.SYSTEM_SIMULATION_TIME) - 2 * this.device_settings.screen_width_offset / this.device_settings.SYSTEM_SIMULATION_TIME
+        var simulation_time = this.device_settings.SYSTEM_SIMULATION_TIME;
+        var delta_t = this.device_settings.SYSTEM_DELTA_T;
 
-        var in_time = true;
-        var curr_width = this.device_settings.screen_width_offset;
+        var max_trolley_x = this.device_settings.max_trolley_x;
 
-        var amplitude = 200; // wave amplitude
-        var freq = this.device_settings.knob_seconds[1]; // angular frequency
-        var rate = (2 * Math.PI) * freq; // point spacing
-        var phase = this.device_settings.knob_seconds[2] * (2 * Math.PI) / 180; // phase angle
+        if (max_trolley_x == 0) {
+            max_trolley_x = 1;
+        }
 
-        var width_point = (width / this.device_settings.SYSTEM_SIMULATION_TIME) - 2 * this.device_settings.screen_width_offset / this.device_settings.SYSTEM_SIMULATION_TIME
+        var sreen_rate = this.device_settings.sreen_rate;
+
+        var screen_width = sreen_rate * (this.device_settings.screen_width);
+        var screen_width_offset = sreen_rate * this.device_settings.screen_width_offset;
+        var screen_h = sreen_rate * (this.device_settings.screen_h);
+        var screen_h_offset = sreen_rate * this.device_settings.screen_h_offset;
+
+        var screen_h_offset_special = -screen_h_offset + screen_h;
+
+        var width_point = (screen_width / simulation_time) - 2 * screen_width_offset / simulation_time
+        var height_point = (screen_h / max_trolley_x) - 2 * screen_h_offset / max_trolley_x
+
+
+        var meas = $('.meas').find('li');
+        var max_y_rounded = max_trolley_x;
+        $.each(meas, function (i, el) {
+            $(el).html((max_y_rounded * ((10 - i) / 10)).toFixed(3));
+        })
+
+
+
+        var t = Device.settings.t;
+        var y = Device.settings.y;
+
+        var knob0 = Device.settings.knob_seconds[0];
+        var knob1 = Device.settings.knob_seconds[1];
+
+        console.log(screen_h_offset_special)
+
+
+        // var curr_height = 520;
+
+
 
 
         for (var i = 1; i < 200; i++) {
@@ -435,52 +372,21 @@ class Display {
 
             // console.log(Device.settings.y[i-1])
 
-            line.setAttribute('x1', curr_width + Device.settings.t[i - 1] * width_point);
-            line.setAttribute('y1', -Device.settings.y[i - 1] * (500 / 200) + 500);
+            line.setAttribute('x1', screen_width_offset * 2 - 25 + t[i - 1] * width_point);
+            line.setAttribute('y1', screen_h_offset_special + 22 - y[i - 1] * height_point);
 
-            line.setAttribute('x2', curr_width + Device.settings.t[i] * width_point);
-            line.setAttribute('y2', -Device.settings.y[i] * (500 / 200) + 500);
+            line.setAttribute('x2', screen_width_offset * 2 - 25 + t[i] * width_point);
+            line.setAttribute('y2', screen_h_offset_special + 22 - y[i] * height_point);
 
-            if (i < Device.settings.knob_seconds[0] / delta_t) {
+            if (i - 1 < knob0 / delta_t) {
                 line.setAttribute('style', "stroke:red;stroke-width:2   ");
-            } else if (i < Device.settings.knob_seconds[1] / delta_t) {
+            } else if (i - 1 < knob1 / delta_t) {
                 line.setAttribute('style', "stroke:blue;stroke-width:2   ");
             } else {
                 line.setAttribute('style', "stroke:green;stroke-width:2   ");
             }
-
-
             $(envelope_visualizer).append(line);
         }
-
-
-
-
-
-
-
-
-
-
-        // for (var i = 0; i < smpls; i++) {
-        //     // if (i < (smpls / 10)) {
-        //         var dxdvdt = Physics.goMove(i)
-        //         // var dt = i * delta_t
-
-        //     //     $(Device.settings.x).push(dxdv[0])
-        //     //     $(Device.settings.v).push(dxdv[1])
-        //     //     $(Device.settings.t).push(dt)
-        //     // // } else if (i < (smpls - 1)) {
-        //     //     var dxdv = Physics.goBrake(i)
-        //     //     var dt = i * delta_t
-        //     //     $(Device.settings.x).push(dxdv[0])
-        //     //     $(Device.settings.v).push(dxdv[1])
-        //     //     $(Device.settings.t).push(dt)
-        //     // }
-        // }
-        // console.log(Device.settings.x)
-        // console.log(t)
-        // console.log(v)
-        //return x, t, v
+        Device.settings.max_trolley_x = 0;
     }
 }
