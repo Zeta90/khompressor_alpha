@@ -1,0 +1,274 @@
+@font-face {
+  font-family: "LCD";
+  src: url("../fonts/LCDWinTT/LCD2L___.TTF");
+}
+
+/* WAVE BUTTONS */
+.slopeSVG {
+  /* position: absolute;
+  left: 37px;
+  top: -11px; */
+}
+
+/* RULER */
+.osc_ruller {
+  background-color: #112f1169;
+  width: 80;
+  height: 100%;
+  border-top-left-radius: 10px;
+  position: absolute;
+  border-bottom-left-radius: 10px;
+}
+
+.meas {
+  position: absolute;
+  padding-top: 0px;
+  left: -30px;
+}
+
+.meass {
+  position: absolute;
+  padding-top: 0px;
+  left: -30px;
+  top: 130px;
+}
+
+.meass li {
+  list-style: none;
+  color: rgb(49, 22, 54);
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.meas li {
+  list-style: none;
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+.slopeUp {
+  stroke: #999;
+  stroke-width: 8;
+}
+
+.slopeDown {
+  stroke: #999;
+  stroke-width: 8;
+}
+
+.kh_device {
+  width: 100%;
+  height: 750px;
+  background-color: red;
+  border-radius: 20px;
+  background: #303033;
+  background-image: url("../images/template/device/background/broken_noise.webp");
+  padding: 30px;
+}
+
+.kh_screen {
+  position: relative;
+  border-radius: 10px;
+  width: 99%;
+  height: 300px;
+  /* background-color: red; */
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 20px;
+  /* margin-top: */
+  /* margin-top:10px */
+}
+
+.kh_controllers {
+  margin-top: 20px;
+  /* position: relative; */
+  border-radius: 10px;
+  width: 99%;
+  height: 300px;
+  /* background-color: red; */
+  margin-right: auto;
+  margin-left: auto;
+  border-color: rgb(121, 121, 121);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.kh_analog_buttons {
+  /* float: right; */
+}
+
+.kh_lcd_display {
+  background: linear-gradient(90deg, #161122 4px, transparent 1%) center,
+    linear-gradient(#161122 4px, transparent 1%) center, #a799cc;
+  background-size: 5px 5px;
+  background-color: #3e3e3ee0;
+  /* width: 400px; */
+  border-radius: 15px;
+  margin-top: 10px;
+  margin-left: 10px;
+  border-color: rgb(62, 62, 62);
+  border-style: solid;
+  padding: 5px 0 2px 10px;
+  border-width: 1px;
+  height: 230px;
+
+  -webkit-box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.75);
+}
+
+.kh_lcd_display .main_content {
+  font-family: "LCD";
+  color: rgb(255, 255, 255);
+  font-size: 18px;
+  letter-spacing: 0.1rem;
+}
+
+.kh_lcd_display .content {
+  font-family: "LCD";
+  color: rgb(255, 255, 255);
+  font-size: 14px;
+  letter-spacing: 0.1rem;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.mtop30 {
+  margin-top: 30px;
+}
+
+.mtop40 {
+  margin-top: 40px;
+}
+
+.centerknob {
+  margin: auto;
+}
+
+.button-group {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  /* min-width: 600px; */
+  width: 300px;
+  height: 40px;
+  background-color: #000;
+  border-radius: 7px;
+  padding: 4px;
+  font-size: 10px;
+  margin: 10px auto 0px auto;
+}
+
+.button-group > div {
+  cursor: pointer;
+  flex: 1;
+  background-image: linear-gradient(to top, #242424 0%, #303030 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px;
+  transition: 0.2s;
+  font-size: 2.5em;
+  box-shadow: inset 0 20px 4px -21px rgba(255, 255, 255, 0.4),
+    0 19px 13px 0 rgba(0, 0, 0, 0.3);
+  color: #181818;
+  position: relative;
+  z-index: 2;
+}
+.button-group > div:before {
+  content: "";
+  display: block;
+  width: 0.8em;
+  height: 0.8em;
+  transition: 0.1s;
+  background-image: radial-gradient(
+    circle 30px at center,
+    #ebf7ff 0%,
+    #b3e1ff 47%,
+    #b3e1ff 100%
+  );
+  position: absolute;
+  filter: blur(15px);
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+.button-group > div:after {
+  content: "";
+  display: block;
+  height: 70px;
+  width: 1px;
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: 0.2s;
+  filter: blur(0px);
+  box-shadow: -75px 0 0px 0px rgba(179, 225, 255, 0.3),
+    74px 0 0px 0px rgba(179, 225, 255, 0.35);
+}
+.button-group > div svg {
+  height: 2em;
+  width: 2em;
+  position: relative;
+  display: block;
+  fill: #999999;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.15)) url("#inset-shadow");
+}
+.button-group > div.active {
+  background-image: linear-gradient(to top, #151515 0%, #1d1d1d 100%);
+  box-shadow: inset 0 16px 14px -21px transparent,
+    0 0px 13px 0 rgba(0, 0, 0, 0.3), inset 0 0 7px 2px rgba(0, 0, 0, 0.4);
+  z-index: 0;
+}
+.button-group > div.active:before {
+  width: 1em;
+  height: 1em;
+  opacity: 0.8;
+}
+.button-group > div.active:after {
+  opacity: 0;
+}
+.button-group > div.active svg {
+  fill: url("#active");
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0));
+}
+.button-group div:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+.button-group div:first-of-type:after {
+  box-shadow: -85px 0 18px 1px transparent, 83px 0 12px 1px #b3e1ff;
+}
+.button-group div:last-of-type {
+  border-radius: 0 4px 4px 0;
+}
+.button-group div:last-of-type:after {
+  box-shadow: -85px 0 18px 1px #b3e1ff, 83px 0 12px 1px transparent;
+}
+.svg-filters {
+  height: 0;
+  width: 0;
+}
+
+/* SELECTOR SWITCH */
+
+.sel_section {
+  font-family: "Orbitron", sans-serif;
+  padding: 10px;
+}
+
+.sel_section.active {
+  color: rgb(106, 128, 255);
+  text-shadow: 0 0 5px rgb(14, 0, 216), 0 0 10px rgb(76, 78, 175),
+    0 0 20px rgb(0, 125, 134), 0 0 40px #0ff, 0 0 80px #0ff, 0 0 90px #0ff,
+    0 0 100px #0ff, 0 0 150px #0ff;
+}
+
+.controls_oscillator, .controls_simulator{
+    display: none;
+}
+.controls_oscillator.active, .controls_simulator.active{
+    display: unset;
+}
